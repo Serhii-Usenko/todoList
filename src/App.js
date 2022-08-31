@@ -1,24 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Box, Container, TextField, Button } from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import DoneIcon from '@mui/icons-material/Done';
+import "./App.css";
+
 
 function App() {
+
+  const [todoInput, setTodoInput] = useState('');
+  
+
+  const addTodo = (e) => {
+    e.preventDefault();
+    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '80%',
+      }}
+    >
+      <h2>My Todo List</h2>
+      <form>
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <AddBoxIcon fontSize="medium" color="success" sx={{mr: 1, my: 0.5 }} />
+          <Box sx={{width: "250px"}}>
+              <TextField
+                fullWidth
+                label='add what needs to be done'
+                variant="standard"
+                value={todoInput}
+                onChange={(e) => setTodoInput(e.target.value)}
+              />
+          </Box>
+          <Button
+            size="small"
+            variant="contained"
+            sx={{
+              ml: '10px'
+            }}
+            type="submit"
+            onClick={addTodo}
+          >
+            Add
+            <DoneIcon/>
+          </Button>
+        </Box>
+      </form>
+    </Container>
   );
 }
 
