@@ -29,10 +29,14 @@ function App() {
       const docRef = await addDoc(collection(db, "todos"), {
         inprogress: true,
         todo: todoInput,
+        time: new Date().toLocaleString() + "",
+        editStatusTime: false
       });
     } catch (error) {
       console.error("error adding: ", error);
     }
+
+    setTodoInput('')
   };
 
   return (
@@ -83,6 +87,8 @@ function App() {
           todo={el.todo}
           todoData={el}
           inprogress={el.inprogress}
+          time={el.time}
+          editStatusTime ={el.editStatusTime}
         />
       ))}
     </>
