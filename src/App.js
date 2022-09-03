@@ -6,6 +6,7 @@ import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
 import { db } from "../src/firebase-config";
 import TodoList from "./components/TodoList";
 import AlertMessage from "./components/alertMessage/AlertMessage";
+import FilterButtons from "./components/filterButtons/FilterButtons";
 
 function App() {
   const [todoInput, setTodoInput] = useState("");
@@ -15,6 +16,8 @@ function App() {
     status: 'success',
     message: ''
   })
+  const [filterState, setFilterState] = useState([]);
+  const [toggleButtons, setToggleButtons] = useState(false)
 
   useEffect(() => {
     const q = query(collection(db, "todos"));
@@ -47,11 +50,31 @@ function App() {
       console.error("error adding: ", error);
     }
 
-    setTodoInput('')
+    setTodoInput('');
   };
 
   const handleClose = (prop) => {
     setAlert(prop)
+  }
+
+  const isInProgress = () => {
+    
+    const res = setFilterState(todos.filter(el => el.inprogress === true));
+    setToggleButtons(true)
+
+    return res;
+
+
+  }
+
+  const isInProgressComplete = () => {
+    const res =  setFilterState(todos.filter(el => el.inprogress === false));
+    setToggleButtons(true)
+    return res;
+  }
+
+  const inProgressAll = () => {
+    return setFilterState(todos);
   }
 
   return (
@@ -95,9 +118,10 @@ function App() {
             </Button>
           </Box>
         </form>
+        <FilterButtons isInProgress={isInProgress} isInProgressComplete={isInProgressComplete} inProgressAll={inProgressAll} />
         <AlertMessage alert={alert} onClose={handleClose} />
       </Container>
-      {todos.map((el) => (
+      {toggleButtons ? filterState.map((el) => (
         <TodoList
           id={el.id}
           todo={el.todo}
@@ -106,7 +130,18 @@ function App() {
           time={el.time}
           editStatusTime ={el.editStatusTime}
         />
-      ))}
+      ))
+        : todos.map((el) => (
+          <TodoList
+            id={el.id}
+            todo={el.todo}
+            todoData={el}
+            inprogress={el.inprogress}
+            time={el.time}
+            editStatusTime ={el.editStatusTime}
+          />
+        ))
+      }
     </>
   );
 }

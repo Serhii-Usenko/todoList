@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 const AlertMessage = ({alert, onClose}) => {
   const [open, setOpen] = useState(alert);
-  console.log(open)
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

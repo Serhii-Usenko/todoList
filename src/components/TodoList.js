@@ -23,8 +23,6 @@ const TodoList = ({ id, todo, inprogress, todoData, time, editStatusTime }) => {
   const [newTodo, setNewTodo] = useState("");
   const [onEdit, setOnEdit] = useState(false);
 
-  console.log(todoData.inprogress)
-
   const toChangeTodo = (e) => {
     if (inprogress) {
       setNewTodo(e);
