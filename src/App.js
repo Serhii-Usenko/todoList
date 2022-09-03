@@ -5,10 +5,16 @@ import DoneIcon from "@mui/icons-material/Done";
 import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
 import { db } from "../src/firebase-config";
 import TodoList from "./components/TodoList";
+import AlertMessage from "./components/alertMessage/AlertMessage";
 
 function App() {
   const [todoInput, setTodoInput] = useState("");
   const [todos, setTodos] = useState([]);
+  const [alert, setAlert] = useState({
+    open: false,
+    status: 'success',
+    message: ''
+  })
 
   useEffect(() => {
     const q = query(collection(db, "todos"));
@@ -32,12 +38,21 @@ function App() {
         time: new Date().toLocaleString() + "",
         editStatusTime: false
       });
+      setAlert({
+        open: true,
+        status: 'success',
+        message: 'added successfully'
+      })
     } catch (error) {
       console.error("error adding: ", error);
     }
 
     setTodoInput('')
   };
+
+  const handleClose = (prop) => {
+    setAlert(prop)
+  }
 
   return (
     <>
@@ -80,6 +95,7 @@ function App() {
             </Button>
           </Box>
         </form>
+        <AlertMessage alert={alert} onClose={handleClose} />
       </Container>
       {todos.map((el) => (
         <TodoList

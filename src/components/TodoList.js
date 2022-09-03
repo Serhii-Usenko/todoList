@@ -23,11 +23,12 @@ const TodoList = ({ id, todo, inprogress, todoData, time, editStatusTime }) => {
   const [newTodo, setNewTodo] = useState("");
   const [onEdit, setOnEdit] = useState(false);
 
+  console.log(todoData.inprogress)
+
   const toChangeTodo = (e) => {
     if (inprogress) {
       setNewTodo(e);
     }
-
   };
 
   const toggleEdit = () => {
@@ -45,8 +46,12 @@ const TodoList = ({ id, todo, inprogress, todoData, time, editStatusTime }) => {
   };
 
   const handleEdit = async (todoData, newTodo) => {
-    await updateDoc(doc(db, "todos", todoData.id), { todo: newTodo, time: new Date().toLocaleString() + "", editStatusTime: true });
-    setOnEdit(!onEdit)
+    await updateDoc(doc(db, "todos", todoData.id), {
+      todo: newTodo,
+      time: new Date().toLocaleString() + "",
+      editStatusTime: true,
+    });
+    setOnEdit(!onEdit);
   };
 
   return (
@@ -88,27 +93,27 @@ const TodoList = ({ id, todo, inprogress, todoData, time, editStatusTime }) => {
               secondary={
                 <>
                   {onEdit ? (
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <TextField
-                        autoFocus
-                        variant="outlined"
-                        defaultValue={todo}
-                        onChange={(e) => toChangeTodo(e.target.value)}
-                      />
-                      <Button
-                        type="submit"
-                        variant='contained'
-                        sx={{ml: '2px'}}
-                        onClick={() => handleEdit(todoData, newTodo)}
-                      >    
-                        edit
-                      </Button>
-                    </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TextField
+                          autoFocus
+                          variant="outlined"
+                          defaultValue={todo}
+                          onChange={(e) => toChangeTodo(e.target.value)}
+                        />
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          sx={{ ml: "2px" }}
+                          onClick={() => handleEdit(todoData, newTodo)}
+                        >
+                          edit
+                        </Button>
+                      </Box>
                   ) : (
                     <Typography
                       sx={{
@@ -117,7 +122,9 @@ const TodoList = ({ id, todo, inprogress, todoData, time, editStatusTime }) => {
                       }}
                     >
                       {inprogress
-                        ? (editStatusTime ? `Status: in progress from ${time} (edit)` : `Status: in progress from ${time}`)
+                        ? editStatusTime
+                          ? `Status: in progress from ${time} (edit)`
+                          : `Status: in progress from ${time}`
                         : "Status: done"}
                     </Typography>
                   )}
